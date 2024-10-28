@@ -35,7 +35,7 @@ const parseNumber = (string) => {
   if (stringNumber === '') {
     return NaN;
   }
-  return stringNumber;
+  return Number(stringNumber);
 };
 
 // parseNumber('2023 год');            // 2023
