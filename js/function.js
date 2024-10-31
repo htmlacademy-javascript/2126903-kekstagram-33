@@ -2,7 +2,8 @@
 
 const stringLength = (string, fixLength) => string.length <= fixLength;
 
-// console.log(stringLength('проверяемая строка', 20)); // true
+stringLength('проверяемая строка', 20); // true
+
 // console.log(stringLength('проверяемая строка', 18)); //true
 // console.log(stringLength('проверяемая строка', 10)); //false
 
@@ -17,7 +18,8 @@ const checkPalindrom = (string) => {
   return newString === reverseString;
 };
 
-// checkPalindrom('топот'); // true
+checkPalindrom('топот'); // true
+
 // checkPalindrom('ДовОд'); // true
 // checkPalindrom('Кекс');  // false
 // checkPalindrom('Лёша на полке клопа нашёл '); // true
@@ -38,7 +40,8 @@ const parseNumber = (string) => {
   return Number(stringNumber);
 };
 
-// parseNumber('2023 год');            // 2023
+parseNumber('2023 год'); // 2023
+
 // parseNumber('ECMAScript 2022');     // 2022
 // parseNumber('1 кефир, 0.5 батона'); // 105
 // parseNumber('агент 007');           // 7
