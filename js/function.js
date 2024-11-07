@@ -52,13 +52,13 @@ parseNumber('2023 год'); // 2023
 
 // Task 4
 
-const timeInMinuters = (time) => {
+const timeInMinutes = (time) => {
   const arrayTime = time.split(':');
-  const minuters = arrayTime[0] * 60 + Number(arrayTime[1]);
-  return minuters;
+  const minutes = arrayTime[0] * 60 + Number(arrayTime[1]);
+  return minutes;
 };
 
-const checkMeet = (startDay, endDay, startMeet, timeMeet) => timeInMinuters(startMeet) + timeMeet >= timeInMinuters(startDay) && timeInMinuters(startMeet) + timeMeet <= timeInMinuters(endDay);
+const checkMeet = (startDay, endDay, startMeet, timeMeet) => timeInMinutes(startMeet) + timeMeet >= timeInMinutes(startDay) && timeInMinutes(startMeet) + timeMeet <= timeInMinutes(endDay);
 
 checkMeet('08:00', '17:30', '14:00', 90);
 
