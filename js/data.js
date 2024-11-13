@@ -2,6 +2,13 @@ import { getRandomInteger, getRandomElement } from './util.js';
 
 const PHOTO_COUNT = 25;
 
+const commentAvatarSize = {
+  HEIGHT: 35,
+  WIDTH: 35
+};
+
+const COMMENTS_STEP = 5;
+
 const DESCRIPTION = [
   'Очень красивое фото!',
   'Посмотрите какой вид',
@@ -81,4 +88,4 @@ const createPictures = () => Array.from({ length: PHOTO_COUNT }, createPicture);
 
 const pictures = createPictures();
 
-export { pictures };
+export { pictures, commentAvatarSize, COMMENTS_STEP };
