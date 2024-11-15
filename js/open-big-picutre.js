@@ -100,6 +100,5 @@ const onClickPicture = (evt) => {
     openBigPicture();
   }
 };
-
 buttonCommentsLoader.removeEventListener('click', onCommentsLoaderClick);
 picturesContainer.addEventListener('click', onClickPicture);
