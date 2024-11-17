@@ -1,13 +1,22 @@
+import { openBigPicture } from './open-big-picutre';
+
 const picturesContainer = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
-const createThumbnail = ({ id, url, description, likes, comments }) => {
+const createThumbnail = (picture) => {
   const thumbnail = pictureTemplate.cloneNode(true);
-  thumbnail.setAttribute('data-id', id);
-  thumbnail.querySelector('.picture__img').src = url;
-  thumbnail.querySelector('.picture__img').alt = description;
-  thumbnail.querySelector('.picture__likes').textContent = likes;
-  thumbnail.querySelector('.picture__comments').textContent = comments.length;
+  thumbnail.querySelector('.picture__img').src = picture.url;
+  thumbnail.querySelector('.picture__img').alt = picture.description;
+  thumbnail.querySelector('.picture__likes').textContent = picture.likes;
+  thumbnail.querySelector('.picture__comments').textContent = picture.comments.length;
+
+  const onPictureElementClick = (evt) => {
+    evt.preventDefault();
+
+    openBigPicture(picture);
+  };
+
+  thumbnail.addEventListener('click', onPictureElementClick);
 
   return thumbnail;
 };
@@ -15,8 +24,8 @@ const createThumbnail = ({ id, url, description, likes, comments }) => {
 const renderThumbnail = (pictures) => {
   const picturesFragment = document.createDocumentFragment();
 
-  pictures.forEach((picture) => {
-    const thumbnail = createThumbnail(picture);
+  pictures.forEach((pictureElement) => {
+    const thumbnail = createThumbnail(pictureElement);
     picturesFragment.append(thumbnail);
   });
 
