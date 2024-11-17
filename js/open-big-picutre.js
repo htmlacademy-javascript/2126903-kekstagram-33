@@ -1,7 +1,6 @@
-import { pictures, commentAvatarSize, COMMENTS_STEP } from './data';
+import { commentAvatarSize, COMMENTS_STEP } from './data';
 import { isEscKey, numDecline } from './util';
 
-const picturesContainer = document.querySelector('.pictures');
 const bigPicture = document.querySelector('.big-picture');
 const socialCommentCount = document.querySelector('.social__comment-count');
 const socialComments = bigPicture.querySelector('.social__comments');
@@ -51,11 +50,7 @@ const onCommentsLoaderClick = () => {
   renderComments();
 };
 
-const createBigPicture = (id) => {
-  const picture = pictures.find((picturesElement) => picturesElement.id === Number(id));
-  if (!picture) {
-    return;
-  }
+const createBigPicture = (picture) => {
   const { url, description, likes, comments } = picture;
   bigPicture.querySelector('.big-picture__img img').src = url;
   bigPicture.querySelector('.big-picture__img img').alt = description;
@@ -81,24 +76,17 @@ function onDocumentKeydown(evt) {
   }
 }
 
-const openBigPicture = () => {
+const openBigPicture = (picture) => {
   bigPicture.classList.remove('hidden');
   body.classList.add('.modal-open');
+  createBigPicture(picture);
 
   buttonCommentsLoader.addEventListener('click', onCommentsLoaderClick);
   document.addEventListener('keydown', onDocumentKeydown);
   bigPictureCancel.addEventListener('click', closeBigPicture);
 };
 
-const onClickPicture = (evt) => {
-  evt.preventDefault();
-  const pictureTarget = evt.target.closest('.picture');
-  const pictureId = pictureTarget.dataset.id;
-
-  if (pictureId) {
-    createBigPicture(pictureId);
-    openBigPicture();
-  }
-};
 buttonCommentsLoader.removeEventListener('click', onCommentsLoaderClick);
-picturesContainer.addEventListener('click', onClickPicture);
+
+export { openBigPicture };
+
