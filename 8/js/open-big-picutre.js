@@ -72,7 +72,6 @@ const closeBigPicture = () => {
   bigPicture.classList.add('hidden');
   body.classList.remove('.modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
-  buttonCommentsLoader.removeEventListener('click', onCommentsLoaderClick);
 };
 
 function onDocumentKeydown(evt) {
@@ -101,5 +100,5 @@ const onClickPicture = (evt) => {
     openBigPicture();
   }
 };
-
+buttonCommentsLoader.removeEventListener('click', onCommentsLoaderClick);
 picturesContainer.addEventListener('click', onClickPicture);
