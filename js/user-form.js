@@ -1,7 +1,10 @@
 import { isEscKey, numDecline } from './util';
+import { onEffectChange } from './effect-selection';
 
 const MAX_HASHTAGS = 5;
 const MAX_SYMBOLS = 20;
+
+const SCALE_STEP = 25;
 
 const imgUploadForm = document.querySelector('.img-upload__form');
 const imgUpload = document.querySelector('.img-upload');
@@ -9,6 +12,12 @@ const uploadFile = imgUpload.querySelector('#upload-file');
 const uploadOverlay = imgUpload.querySelector('.img-upload__overlay');
 const imgUploadCancle = imgUpload.querySelector('.img-upload__cancel');
 const hashtagInput = imgUploadForm.querySelector('.text__hashtags');
+const smallerControl = document.querySelector('.scale__control--smaller');
+const biggerControl = document.querySelector('.scale__control--bigger');
+const effectsList = document.querySelector('.effects__list');
+const effectLevel = document.querySelector('.img-upload__effect-level');
+const controlValue = document.querySelector('.scale__control--value');
+const uploadPreviewPicture = document.querySelector('.img-upload__preview img');
 
 let errorMessage = '';
 
@@ -74,9 +83,24 @@ const isHashtagValid = (value) => {
 
 pristine.addValidator(hashtagInput, isHashtagValid, error, 2, false);
 
+const resizesPicture = (evt) => {
+  let numValue = parseInt(controlValue.value, 10);
+  if (evt.target.classList.contains('scale__control--smaller') && numValue > 25) {
+    numValue -= SCALE_STEP;
+  } else if (evt.target.classList.contains('scale__control--bigger') && numValue < 100) {
+    numValue += SCALE_STEP;
+  }
+  uploadPreviewPicture.style.transform = `scale(${numValue / 100})`;
+  controlValue.value = `${numValue}%`;
+};
+
 const onCloseImgUpload = () => {
   document.body.classList.remove('modal-open');
   uploadOverlay.classList.add('hidden');
+  effectLevel.classList.add('hidden');
+  uploadPreviewPicture.style.filter = 'none';
+  controlValue.value = '100%';
+  uploadPreviewPicture.style.transform = `scale(${controlValue.value})`;
   imgUploadForm.reset();
   document.removeEventListener('keydown', onDocumentKeydown);
 };
@@ -108,6 +132,12 @@ const onSubmitForm = (evt) => {
     imgUploadForm.submit();
   }
 };
+
+effectsList.addEventListener('change', onEffectChange);
+
+smallerControl.addEventListener('click', resizesPicture);
+
+biggerControl.addEventListener('click', resizesPicture);
 
 hashtagInput.addEventListener('input', onHashtagInput);
 
