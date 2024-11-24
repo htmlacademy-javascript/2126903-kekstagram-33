@@ -1,7 +1,12 @@
-import { createPictures } from './data.js';
 import { renderThumbnail } from './render-thumbnails.js';
 import './open-big-picutre.js';
-import './user-form.js';
+import { onCloseFrom, setUserFormSubmit } from './user-form.js';
+import { getData } from './api.js';
 
-renderThumbnail(createPictures());
 
+getData()
+  .then((pictures) => {
+    renderThumbnail(pictures);
+  });
+
+setUserFormSubmit(onCloseFrom);
