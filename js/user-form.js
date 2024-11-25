@@ -1,10 +1,17 @@
 import { isEscKey, numDecline } from './util';
 import { onEffectChange } from './effect-selection';
+import { sendData } from './api';
+import { showModal } from './api-util';
 
 const MAX_HASHTAGS = 5;
 const MAX_SYMBOLS = 20;
 
 const SCALE_STEP = 25;
+
+const SubmitButtonText = {
+  IDLE: 'Сохранить',
+  SENDING: 'Сохраняю...',
+};
 
 const imgUploadForm = document.querySelector('.img-upload__form');
 const imgUpload = document.querySelector('.img-upload');
@@ -18,6 +25,12 @@ const effectsList = document.querySelector('.effects__list');
 const effectLevel = document.querySelector('.img-upload__effect-level');
 const controlValue = document.querySelector('.scale__control--value');
 const uploadPreviewPicture = document.querySelector('.img-upload__preview img');
+const submitButton = document.querySelector('.img-upload__submit');
+
+const successPopup = document.querySelector('#success').content.querySelector('.success');
+
+const errorPopup = document.querySelector('#error').content.querySelector('.error');
+
 
 let errorMessage = '';
 
@@ -94,7 +107,7 @@ const resizesPicture = (evt) => {
   controlValue.value = `${numValue}%`;
 };
 
-const onCloseImgUpload = () => {
+const onCloseFrom = () => {
   document.body.classList.remove('modal-open');
   uploadOverlay.classList.add('hidden');
   effectLevel.classList.add('hidden');
@@ -109,7 +122,7 @@ function onDocumentKeydown(evt) {
   if (isEscKey(evt) && !evt.target.classList.contains('text__hashtags')
     && !evt.target.classList.contains('text__description')) {
     evt.preventDefault();
-    onCloseImgUpload();
+    onCloseFrom();
   }
 }
 
@@ -117,21 +130,49 @@ const onHashtagInput = () => {
   isHashtagValid(hashtagInput.value);
 };
 
-const onSelectPicture = () => {
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
+const onOpenFrom = () => {
   document.body.classList.add('modal-open');
   uploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onDocumentKeydown);
-  imgUploadCancle.addEventListener('click', onCloseImgUpload);
+  imgUploadCancle.addEventListener('click', onCloseFrom);
 };
 
-const onSubmitForm = (evt) => {
-  evt.preventDefault();
+const setUserFormSubmit = (onSuccess) => {
+  imgUploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
 
-  if (pristine.validate()) {
-    hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
-    imgUploadForm.submit();
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(() => {
+          onSuccess();
+        })
+        .then(unblockSubmitButton)
+        .then(() => {
+          if (submitButton.textContent === SubmitButtonText.IDLE) {
+            showModal(successPopup, 'success');
+          }
+        })
+        .catch(() => {
+          showModal(errorPopup, 'error');
+          unblockSubmitButton();
+        });
+    }
   }
+  );
 };
+
 
 effectsList.addEventListener('change', onEffectChange);
 
@@ -141,7 +182,6 @@ biggerControl.addEventListener('click', resizesPicture);
 
 hashtagInput.addEventListener('input', onHashtagInput);
 
-uploadFile.addEventListener('change', onSelectPicture);
+uploadFile.addEventListener('change', onOpenFrom);
 
-imgUploadForm.addEventListener('submit', onSubmitForm);
-
+export { onOpenFrom, onCloseFrom, setUserFormSubmit };
