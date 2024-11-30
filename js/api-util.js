@@ -45,16 +45,16 @@ const showErrorMessage = () => {
   }, ALERT_SHOW_TIME);
 };
 
-function onSuccess(data) {
+const onSuccess = (data) => {
   imgFilters.classList.remove('img-filters--inactive');
   photos = [...data];
   renderThumbnail(photos);
   changeFilter(photos);
-}
+};
 
-function onError() {
+const onError = () => {
   imgFilters.classList.add('img-filters--inactive');
   showErrorMessage();
-}
+};
 
 export { showErrorMessage, showModal, onError, onSuccess };
