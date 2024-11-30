@@ -1,5 +1,3 @@
-import { showErrorMessage } from './api-util';
-
 const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 
 const Route = {
@@ -9,10 +7,7 @@ const Route = {
 
 const getData = () => fetch(
   `${BASE_URL}${Route.GET_DATA}`)
-  .then((response) => response.json())
-  .catch(() => {
-    showErrorMessage();
-  });
+  .then((response) => response.json());
 
 const sendData = (body) => fetch(
   `${BASE_URL}${Route.SEND_DATA}`,

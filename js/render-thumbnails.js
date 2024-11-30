@@ -24,11 +24,11 @@ const createThumbnail = (picture) => {
 const renderThumbnail = (pictures) => {
   const picturesFragment = document.createDocumentFragment();
 
-  pictures.forEach((pictureElement) => {
-    const thumbnail = createThumbnail(pictureElement);
-    picturesFragment.append(thumbnail);
-  });
-
+  pictures.
+    forEach((pictureElement) => {
+      const thumbnail = createThumbnail(pictureElement);
+      picturesFragment.append(thumbnail);
+    });
   picturesContainer.append(picturesFragment);
 };
 

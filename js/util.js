@@ -1,3 +1,5 @@
+const RERENDER_DELAY = 500;
+
 const getRandomInteger = (min, max) => {
   const lower = Math.ceil(Math.min(min, max));
   const upper = Math.floor(Math.max(min, max));
@@ -24,5 +26,21 @@ const numDecline = (num, nominative, genitiveSingular, genitivePlural) => {
   }
 };
 
+const debounce = (callback, timeoutDelay = RERENDER_DELAY) => {
+  let timeoutId;
 
-export { getRandomInteger, getRandomElement, isEscKey, numDecline };
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};
+
+export { getRandomInteger, getRandomElement, isEscKey, numDecline, debounce, shuffleArray };

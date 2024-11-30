@@ -1,10 +1,15 @@
 import { isEscKey } from './util';
+import { renderThumbnail } from './render-thumbnails.js';
+import { changeFilter } from './img-filters.js';
 
 const ALERT_SHOW_TIME = 5000;
 
 const body = document.body;
 
 const dataErrorMessage = document.querySelector('#data-error').content.querySelector('.data-error');
+const imgFilters = document.querySelector('.img-filters');
+
+let photos = [];
 
 const showModal = (element, prefix) => {
   body.append(element);
@@ -33,7 +38,6 @@ const showModal = (element, prefix) => {
   body.addEventListener('keydown', onModalEscape);
 };
 
-
 const showErrorMessage = () => {
   body.appendChild(dataErrorMessage);
   setTimeout(() => {
@@ -41,4 +45,16 @@ const showErrorMessage = () => {
   }, ALERT_SHOW_TIME);
 };
 
-export { showErrorMessage, showModal };
+function onSuccess(data) {
+  imgFilters.classList.remove('img-filters--inactive');
+  photos = [...data];
+  renderThumbnail(photos);
+  changeFilter(photos);
+}
+
+function onError() {
+  imgFilters.classList.add('img-filters--inactive');
+  showErrorMessage();
+}
+
+export { showErrorMessage, showModal, onError, onSuccess };
