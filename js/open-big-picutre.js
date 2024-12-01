@@ -1,5 +1,11 @@
-import { commentAvatarSize, COMMENTS_STEP } from './data';
 import { isEscKey, numDecline } from './util';
+
+const CommentAvatarSize = {
+  HEIGHT: 35,
+  WIDTH: 35
+};
+
+const COMMENTS_STEP = 5;
 
 const bigPicture = document.querySelector('.big-picture');
 const socialCommentCount = document.querySelector('.social__comment-count');
@@ -18,8 +24,8 @@ const createComment = (comment) => {
   const commentText = commentElement.querySelector('.social__text');
   commentImg.src = comment.avatar;
   commentImg.alt = comment.name;
-  commentImg.HEIGHT = commentAvatarSize.HEIGHT;
-  commentImg.WIDTH = commentAvatarSize.WIDTH;
+  commentImg.HEIGHT = CommentAvatarSize.HEIGHT;
+  commentImg.WIDTH = CommentAvatarSize.WIDTH;
   commentText.textContent = comment.message;
   return commentElement;
 };
@@ -29,7 +35,7 @@ const renderComments = () => {
 
   commentsCount = (commentsCount > currentComments.length) ? currentComments.length : commentsCount;
 
-  const commentSelected = currentComments.slice(0, commentsCount);
+  const commentsSelected = currentComments.slice(0, commentsCount);
 
   if (currentComments.length < COMMENTS_STEP || commentsCount >= currentComments.length) {
     buttonCommentsLoader.classList.add('hidden');
@@ -39,7 +45,7 @@ const renderComments = () => {
 
   socialCommentCount.innerHTML = `<span class='social__comment-shown-count'>${commentsCount}</span> из <span class='social__comment-total-count'>${currentComments.length}</span> ${numDecline(currentComments.length, 'комментария', 'комментариев', 'комментариев')}`;
 
-  commentSelected.forEach((comment) => {
+  commentsSelected.forEach((comment) => {
     socialComments.appendChild(createComment(comment));
   });
 };
