@@ -5,6 +5,7 @@ import { showModal } from './api-util';
 
 const MAX_HASHTAGS = 5;
 const MAX_SYMBOLS = 20;
+const MAX_DESCRIPTION_LENGTH = 140;
 
 const SCALE_STEP = 25;
 
@@ -31,14 +32,10 @@ const successPopup = document.querySelector('#success').content.querySelector('.
 
 const errorPopup = document.querySelector('#error').content.querySelector('.error');
 
+const inputDescription = imgUploadForm.querySelector('.text__description');
+
 
 let errorMessage = '';
-
-const pristine = new Pristine(imgUploadForm, {
-  classTo: 'img-upload__form',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextClass: 'img-upload__field-wrapper--error',
-});
 
 const error = () => errorMessage;
 
@@ -94,7 +91,17 @@ const isHashtagValid = (value) => {
   });
 };
 
+const isDescriptionValid = () => inputDescription.value.length <= MAX_DESCRIPTION_LENGTH;
+
+const pristine = new Pristine(imgUploadForm, {
+  classTo: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextClass: 'img-upload__field-wrapper--error',
+});
+
 pristine.addValidator(hashtagInput, isHashtagValid, error, 2, false);
+
+pristine.addValidator(inputDescription, isDescriptionValid, 'Текст комментария не должен превышать 140 символов, включая пробелы', 1, false);
 
 const resizesPicture = (evt) => {
   let numValue = parseInt(controlValue.value, 10);
@@ -107,6 +114,24 @@ const resizesPicture = (evt) => {
   controlValue.value = `${numValue}%`;
 };
 
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
+const onHashtagInput = () => {
+  submitButton.disabled = !pristine.validate();
+};
+
+const onCommentInput = () => {
+  submitButton.disabled = !pristine.validate();
+};
+
 const onCloseFrom = () => {
   document.body.classList.remove('modal-open');
   uploadOverlay.classList.add('hidden');
@@ -114,7 +139,11 @@ const onCloseFrom = () => {
   uploadPreviewPicture.style.filter = 'none';
   controlValue.value = '100%';
   uploadPreviewPicture.style.transform = `scale(${controlValue.value})`;
+  uploadPreviewPicture.style.transform = '';
+  uploadPreviewPicture.style.filter = '';
+  unblockSubmitButton();
   imgUploadForm.reset();
+  pristine.reset();
   document.removeEventListener('keydown', onDocumentKeydown);
 };
 
@@ -125,20 +154,6 @@ function onDocumentKeydown(evt) {
     onCloseFrom();
   }
 }
-
-const onHashtagInput = () => {
-  isHashtagValid(hashtagInput.value);
-};
-
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
-  submitButton.textContent = SubmitButtonText.SENDING;
-};
-
-const unblockSubmitButton = () => {
-  submitButton.disabled = false;
-  submitButton.textContent = SubmitButtonText.IDLE;
-};
 
 const onOpenFrom = () => {
   document.body.classList.add('modal-open');
@@ -167,7 +182,8 @@ const setUserFormSubmit = (onSuccess) => {
         .catch(() => {
           showModal(errorPopup, 'error');
           unblockSubmitButton();
-        });
+        })
+        .finally(() => unblockSubmitButton());
     }
   }
   );
@@ -181,6 +197,7 @@ smallerControl.addEventListener('click', resizesPicture);
 biggerControl.addEventListener('click', resizesPicture);
 
 hashtagInput.addEventListener('input', onHashtagInput);
+inputDescription.addEventListener('input', onCommentInput);
 
 uploadFile.addEventListener('change', onOpenFrom);
 

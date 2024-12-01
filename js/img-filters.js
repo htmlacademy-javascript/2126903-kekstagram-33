@@ -44,7 +44,7 @@ const applyFilter = (data) => {
 
 const changeFilter = (data) => {
   imgFiltersForm.addEventListener('click', onButtonClick);
-  imgFiltersForm.addEventListener('click', debounce(() => applyFilter(data)));
+  imgFiltersForm.addEventListener('click', debounce(applyFilter.bind(null, data)));
 };
 
 export { changeFilter };

@@ -38,13 +38,6 @@ const showModal = (element, prefix) => {
   body.addEventListener('keydown', onModalEscape);
 };
 
-const showErrorMessage = () => {
-  body.appendChild(dataErrorMessage);
-  setTimeout(() => {
-    dataErrorMessage.remove();
-  }, ALERT_SHOW_TIME);
-};
-
 const onSuccess = (data) => {
   imgFilters.classList.remove('img-filters--inactive');
   photos = [...data];
@@ -54,7 +47,10 @@ const onSuccess = (data) => {
 
 const onError = () => {
   imgFilters.classList.add('img-filters--inactive');
-  showErrorMessage();
+  body.append(dataErrorMessage);
+  setTimeout(() => {
+    dataErrorMessage.remove();
+  }, ALERT_SHOW_TIME);
 };
 
-export { showErrorMessage, showModal, onError, onSuccess };
+export { showModal, onError, onSuccess };
