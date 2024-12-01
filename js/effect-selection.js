@@ -17,16 +17,15 @@ const effects = {
 effectLevel.classList.add('hidden');
 
 noUiSlider.create(effectLevelSlider, {
-  range: {
-    min: 0,
-    max: 100,
-  },
   start: 0,
+  range: { min: 0, max: 1 },
   connect: 'lower',
-  to: (value) => Number.isInteger(value)
-    ? value.toFixed(0)
-    : value.toFixed(1),
-  from: (value) => parseFloat(value),
+  format: {
+    from: (value) => parseFloat(value),
+    to: (value) => Number.isInteger(value)
+      ? value
+      : value.toFixed(1),
+  },
 });
 
 const setEffect = (effect) => {

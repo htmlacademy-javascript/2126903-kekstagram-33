@@ -26,7 +26,6 @@ const createComment = (comment) => {
 
 const renderComments = () => {
   socialComments.innerHTML = '';
-  socialCommentCount.innerHTML = '';
 
   commentsCount = (commentsCount > currentComments.length) ? currentComments.length : commentsCount;
 
@@ -38,7 +37,7 @@ const renderComments = () => {
     buttonCommentsLoader.classList.remove('hidden');
   }
 
-  socialCommentCount.innerHTML = `${commentsCount} из <span class='comments-count'>${currentComments.length}</span> ${numDecline(currentComments.length, 'комментария', 'комментариев', 'комментариев')}`;
+  socialCommentCount.innerHTML = `<span class='social__comment-shown-count'>${commentsCount}</span> из <span class='social__comment-total-count'>${currentComments.length}</span> ${numDecline(currentComments.length, 'комментария', 'комментариев', 'комментариев')}`;
 
   commentSelected.forEach((comment) => {
     socialComments.appendChild(createComment(comment));
@@ -65,7 +64,7 @@ const closeBigPicture = () => {
   currentComments = [];
   commentsCount = COMMENTS_STEP;
   bigPicture.classList.add('hidden');
-  body.classList.remove('.modal-open');
+  body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
 };
 
@@ -78,7 +77,7 @@ function onDocumentKeydown(evt) {
 
 const openBigPicture = (picture) => {
   bigPicture.classList.remove('hidden');
-  body.classList.add('.modal-open');
+  body.classList.add('modal-open');
   createBigPicture(picture);
 
   buttonCommentsLoader.addEventListener('click', onCommentsLoaderClick);
