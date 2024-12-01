@@ -35,12 +35,12 @@ const debounce = (callback, timeoutDelay = RERENDER_DELAY) => {
   };
 };
 
-const shuffleArray = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
+const shuffleArray = (arrays) => {
+  for (let i = arrays.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
+    [arrays[i], arrays[j]] = [arrays[j], arrays[i]];
   }
-  return array;
+  return arrays;
 };
 
 export { getRandomInteger, getRandomElement, isEscKey, numDecline, debounce, shuffleArray };
